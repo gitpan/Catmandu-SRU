@@ -21,7 +21,7 @@ provides:
     version: 0
   Catmandu::SRU:
     file: lib/Catmandu/SRU.pm
-    version: 0.01
+    version: 0.0101
 requires:
   Catmandu: 0.0302
   Furl: 0.41
@@ -30,4 +30,4 @@ requires:
   perl: v5.10.1
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.01
+version: 0.0101
