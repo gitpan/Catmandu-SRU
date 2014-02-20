@@ -7,9 +7,9 @@ build_requires:
   Test::Exception: 0
   Test::More: 0
 configure_requires:
-  Module::Build: 0.38
+  Module::Build: 0.42
 dynamic_config: 1
-generated_by: 'Module::Build version 0.38, CPAN::Meta::Converter version 2.120921'
+generated_by: 'Module::Build version 0.4203, CPAN::Meta::Converter version 2.133380'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -18,10 +18,9 @@ name: Catmandu-SRU
 provides:
   Catmandu::Importer::SRU:
     file: lib/Catmandu/Importer/SRU.pm
-    version: 0
   Catmandu::SRU:
     file: lib/Catmandu/SRU.pm
-    version: 0.0101
+    version: 0.02
 requires:
   Catmandu: 0.0302
   Furl: 0.41
@@ -29,5 +28,7 @@ requires:
   XML::LibXML::Simple: 0.91
   perl: v5.10.1
 resources:
+  bugtracker: https://github.com/LibreCat/Catmandu-SRU/issues
   license: http://dev.perl.org/licenses/
-version: 0.0101
+  repository: https://github.com/LibreCat/Catmandu-SRU
+version: 0.02

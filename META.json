@@ -4,7 +4,7 @@
       "Wouter Willaert <wouterw@inuits.eu>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.38, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "Module::Build version 0.4203",
    "license" : [
       "perl_5"
    ],
@@ -23,7 +23,7 @@
       },
       "configure" : {
          "requires" : {
-            "Module::Build" : "0.38"
+            "Module::Build" : "0.42"
          }
       },
       "runtime" : {
@@ -38,19 +38,24 @@
    },
    "provides" : {
       "Catmandu::Importer::SRU" : {
-         "file" : "lib/Catmandu/Importer/SRU.pm",
-         "version" : 0
+         "file" : "lib/Catmandu/Importer/SRU.pm"
       },
       "Catmandu::SRU" : {
          "file" : "lib/Catmandu/SRU.pm",
-         "version" : "0.0101"
+         "version" : "0.02"
       }
    },
    "release_status" : "stable",
    "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/LibreCat/Catmandu-SRU/issues"
+      },
       "license" : [
          "http://dev.perl.org/licenses/"
-      ]
+      ],
+      "repository" : {
+         "url" : "https://github.com/LibreCat/Catmandu-SRU"
+      }
    },
-   "version" : "0.0101"
+   "version" : "0.02"
 }
