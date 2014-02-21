@@ -31,7 +31,9 @@
             "Catmandu" : "0.0302",
             "Furl" : "0.41",
             "Moo" : "1.000003",
+            "URI::Escape" : "1.60",
             "XML::LibXML::Simple" : "0.91",
+            "XML::Struct" : "0.16",
             "perl" : "v5.10.1"
          }
       }
@@ -40,9 +42,24 @@
       "Catmandu::Importer::SRU" : {
          "file" : "lib/Catmandu/Importer/SRU.pm"
       },
+      "Catmandu::Importer::SRU::Parser" : {
+         "file" : "lib/Catmandu/Importer/SRU/Parser.pm"
+      },
+      "Catmandu::Importer::SRU::Parser::marcxml" : {
+         "file" : "lib/Catmandu/Importer/SRU/Parser/marcxml.pm"
+      },
+      "Catmandu::Importer::SRU::Parser::raw" : {
+         "file" : "lib/Catmandu/Importer/SRU/Parser/raw.pm"
+      },
+      "Catmandu::Importer::SRU::Parser::simple" : {
+         "file" : "lib/Catmandu/Importer/SRU/Parser/simple.pm"
+      },
+      "Catmandu::Importer::SRU::Parser::struct" : {
+         "file" : "lib/Catmandu/Importer/SRU/Parser/struct.pm"
+      },
       "Catmandu::SRU" : {
          "file" : "lib/Catmandu/SRU.pm",
-         "version" : "0.02"
+         "version" : "0.032"
       }
    },
    "release_status" : "stable",
@@ -57,5 +74,5 @@
          "url" : "https://github.com/LibreCat/Catmandu-SRU"
       }
    },
-   "version" : "0.02"
+   "version" : "0.032"
 }

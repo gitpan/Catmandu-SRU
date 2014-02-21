@@ -1,10 +1,14 @@
 package Catmandu::Importer::SRU;
 
 use Catmandu::Sane;
+use Catmandu::Importer::SRU::Parser;
+use Catmandu::Util qw(:is);
 use URI::Escape;
 use Moo;
 use Furl;
-use XML::LibXML::Simple ();
+use Carp;
+use XML::LibXML;
+use XML::LibXML::XPathContext;
 
 with 'Catmandu::Importer';
 
@@ -21,7 +25,7 @@ has furl => (is => 'ro', lazy => 1, builder => sub {
 
 # optional.
 has sortKeys => (is => 'ro');
-has recordTag => (is => 'ro');
+has parser => (is => 'rw', default => sub { 'simple' }, coerce => \&_coerce_parser );
 
 # internal stuff.
 has _currentRecordSet => (is => 'ro');
@@ -30,6 +34,25 @@ has _start => (is => 'ro', default => sub { 1 });
 has _max_results => (is => 'ro', default => sub { 10 });
 
 # Internal Methods. ------------------------------------------------------------
+
+sub _coerce_parser {
+  my ($parser) = @_;
+
+  return $parser if is_invocant($parser) or is_code_ref($parser);
+
+  if (is_string($parser) && !is_number($parser)) {
+      my $class = $parser =~ /^\+(.+)/ ? $1
+        : "Catmandu::Importer::SRU::Parser::$parser";
+      my $parser = eval "require $class; new $class";
+      if ($@) {
+        croak $@;
+      } else {
+        return $parser;
+      }
+  }
+
+  return Catmandu::Importer::SRU::Parser->new;
+}
 
 # Internal: HTTP GET something.
 #
@@ -53,21 +76,49 @@ sub _request {
 sub _hashify {
   my ($self, $in) = @_;
 
-  # TODO: use XML:Struct to support preserving order in XML
-  my $xs = XML::LibXML::Simple->new(); 
-  my $out = $xs->XMLin(
-	  $in,
-	  ForceArray => [ 'record' ], # FIXME: hard-coded dc format - WTF?
-	  NsStrip => 1
-  );
+  my $parser = XML::LibXML->new();
+  my $doc    = $parser->parse_string($in);
+  my $root   = $doc->documentElement;
+  my $xc     = XML::LibXML::XPathContext->new( $root );
+  $xc->registerNs("srw","http://www.loc.gov/zing/srw/");
+  $xc->registerNs("d","http://www.loc.gov/zing/srw/diagnostic/");
+  
+  my $diagnostics = {};
 
-  return $out;
+  if ($xc->exists('/srw:searchRetrieveResponse/srw:diagnostics')) {
+    $diagnostics->{diagnostic} = [];
+
+    for ($xc->findnodes('/srw:searchRetrieveResponse/srw:diagnostics/*')) {
+       my $uri     = $xc->findvalue('./d:uri',$_);
+       my $message = $xc->findvalue('./d:message',$_);
+       my $details = $xc->findvalue('./d:details',$_);
+
+       push @{$diagnostics->{diagnostic}} , 
+                { uri => $uri , message => $message , details => $details } ;
+    }
+  }
+
+  my $records = { };
+
+  if ($xc->exists('/srw:searchRetrieveResponse/srw:records')) {
+      $records->{record} = [];
+
+      for ($xc->findnodes('/srw:searchRetrieveResponse/srw:records//srw:record')) {
+        my $recordSchema   = $xc->findvalue('./srw:recordSchema',$_);
+        my $recordPacking  = $xc->findvalue('./srw:recordPacking',$_);
+        my $recordData     = '' . $xc->find('./srw:recordData/*',$_)->pop();
+        my $recordPosition = $xc->findvalue('./srw:recordPosition',$_);
+       
+        push @{$records->{record}} , 
+              { recordSchema => $recordSchema , recordPacking => $recordPacking , 
+                recordData => $recordData , recordPosition => $recordPosition };
+      }
+  }
+
+  return { diagnostics => $diagnostics , records => $records };
 }
 
-# Internal: Makes a call to the SRU API.
-#
-# Returns the XML response body.
-sub _api_call {
+sub url {
   my ($self) = @_;
 
   # construct the url
@@ -80,11 +131,7 @@ sub _api_call {
   $url .= '&startRecord=' . uri_escape($self->_start);
   $url .= '&maximumRecords=' . uri_escape($self->_max_results);
 
-  # http get the url.
-  my $res = $self->_request($url);
-
-  # return the response body.
-  return $res->{content};
+  return $url;
 }
 
 # Internal: gets the next set of results.
@@ -94,12 +141,15 @@ sub _nextRecordSet {
   my ($self) = @_;
 
   # fetch the xml response and hashify it.
-  my $xml = $self->_api_call;
+  my $res  = $self->_request($self->url);
+  my $xml  = $res->{content};
   my $hash = $self->_hashify($xml);
 
   # sru specific error checking.
-  if (my $error = $hash->{'diagnostics'}->{'diagnostic'}) {
-    warn 'SRU DIAGNOSTIC: ', $error->{'message'};
+  if (exists $hash->{'diagnostics'}->{'diagnostic'}) {
+    for my $error (@{$hash->{'diagnostics'}->{'diagnostic'}}) {
+        warn 'SRU DIAGNOSTIC: ', $error->{'message'} , ' : ' , $error->{'details'};
+    }
   }
 
   # get to the point.
@@ -128,10 +178,13 @@ sub _nextRecord {
   # return the next record.
   my $record = $self->_currentRecordSet->[$self->{_n}++];
 
-  if ($self->recordTag) {
-      $record = $record->{recordData}->{$self->recordTag};
+  if (defined $record) {
+      if (is_code_ref($self->parser)) {
+          $record = $self->parser->($record);
+      } else {
+          $record = $self->parser->parse($record);
+      }
   }
-
   return $record;
 }
 
@@ -155,15 +208,38 @@ sub generator {
 
   my %attrs = (
     base => 'http://www.unicat.be/sru',
-    query => '(isbn=0855275103 or isbn=3110035170 or isbn=9010017362 or isbn=9014026188)'
+    query => '(isbn=0855275103 or isbn=3110035170 or isbn=9010017362 or isbn=9014026188)',
+    recordSchema => 'marcxml',
+    parser => 'marcxml'
   );
 
   my $importer = Catmandu::Importer::SRU->new(%attrs);
 
-  my $n = $importer->each(sub {
-    my $hashref = $_[0];
+  my $count = $importer->each(sub {
+	my $schema   = $record->{recordSchema};
+	my $packing  = $record->{recordPacking};
+	my $position = $record->{recordPosition};
+	my $data     = $record->{recordData};
     # ...
   });
+
+  # Using Catmandu::Importer::SRU::Package::marcxml, included in this release
+
+  my $importer = Catmandu::Importer::SRU->new(
+    base => 'http://www.unicat.be/sru',
+    query => '(isbn=0855275103 or isbn=3110035170 or isbn=9010017362 or isbn=9014026188)',
+    recordSchema => 'marcxml' ,
+    parser => 'marcxml' ,
+  );
+
+  # Using a homemade parser
+  
+  my $importer = Catmandu::Importer::SRU->new(
+    base => 'http://www.unicat.be/sru',
+    query => '(isbn=0855275103 or isbn=3110035170 or isbn=9010017362 or isbn=9014026188)',
+    recordSchema => 'marcxml' ,
+    parser => MyParser->new , # or parser => '+MyParser'
+  );
 
 =head1 CONFIGURATION
 
@@ -185,12 +261,6 @@ set to C<dc> by default
 
 optional sorting
 
-=item recordTag
-
-optional XML tag name to get record data from. If not given, each record will
-contain a recordData field that contains another tag that contains the actual
-record. For instance use C<dc> to get field C<< $record->{recordData}->{dc} >>.
-
 =item operation
 
 set to C<searchRetrieve> by default
@@ -207,12 +277,38 @@ HTTP user agent, set to C<Mozilla/5.0> by default.
 
 Instance of L<Furl> or compatible class to fetch URLs with.
 
+=item parser
+
+Controls how records are parsed before importing. The following options
+are possible:
+
+=over
+
+=item
+
+Instance of a Perl package that implements a C<parse> subroutine. See the
+default value C<Catmandu::Importer::SRU::Parser> for an example.
+
+=item
+
+Name of a Perl package that implements a C<parse> subroutine. The name must be
+prepended by C<+> or it prefixed with C<Catmandu::Importer::SRU::Parser::>. For
+instance C<marcxml> will create a C<Catmandu::Importer::SRU::Parser::marcxml>.
+
+=item
+
+Function reference that gets passed the unparsed record.
+ 
 =back
 
 =head1 METHODS
 
 All methods of L<Catmandu::Importer> and by this L<Catmandu::Iterable> are
-inherited.
+inherited. In addition the following methods are provided:
+
+=head2 url
+
+Return the current SRU request URL (useful for debugging).
 
 =head1 SEE ALSO
 

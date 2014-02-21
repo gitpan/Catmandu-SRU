@@ -6,11 +6,11 @@ Catmandu::SRU - Catmandu module for working with SRU data
 
 =head1 VERSION
 
-Version 0.02
+Version 0.032
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.032';
 
 =head1 MODULES
 
@@ -33,6 +33,8 @@ under the terms of either: the GNU General Public License as published
 by the Free Software Foundation; or the Artistic License.
 
 See http://dev.perl.org/licenses/ for more information.
+
+=encoding utf8
 
 =cut
 

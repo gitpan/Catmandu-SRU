@@ -19,7 +19,9 @@ my $builder = Module::Build->new(
         'Catmandu' => '0.0302',
         'Furl' => '0.41',
         'XML::LibXML::Simple' => '0.91',
+        'XML::Struct' => '0.16',
         'Moo' => '1.000003',
+        'URI::Escape' => '1.60',
     },
     add_to_cleanup => [qw(
         Catmandu-SRU*

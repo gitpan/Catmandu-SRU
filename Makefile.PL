@@ -12,7 +12,9 @@ WriteMakefile
                    'Software::License' => 0,
                    'Test::Exception' => 0,
                    'Test::More' => 0,
-                   'XML::LibXML::Simple' => '0.91'
+                   'URI::Escape' => '1.60',
+                   'XML::LibXML::Simple' => '0.91',
+                   'XML::Struct' => '0.16'
                  },
   'INSTALLDIRS' => 'site',
   'EXE_FILES' => [],
