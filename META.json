@@ -59,7 +59,7 @@
       },
       "Catmandu::SRU" : {
          "file" : "lib/Catmandu/SRU.pm",
-         "version" : "0.032"
+         "version" : "0.033"
       }
    },
    "release_status" : "stable",
@@ -74,5 +74,5 @@
          "url" : "https://github.com/LibreCat/Catmandu-SRU"
       }
    },
-   "version" : "0.032"
+   "version" : "0.033"
 }

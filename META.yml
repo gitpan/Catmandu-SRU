@@ -30,7 +30,7 @@ provides:
     file: lib/Catmandu/Importer/SRU/Parser/struct.pm
   Catmandu::SRU:
     file: lib/Catmandu/SRU.pm
-    version: 0.032
+    version: 0.033
 requires:
   Catmandu: 0.0302
   Furl: 0.41
@@ -43,4 +43,4 @@ resources:
   bugtracker: https://github.com/LibreCat/Catmandu-SRU/issues
   license: http://dev.perl.org/licenses/
   repository: https://github.com/LibreCat/Catmandu-SRU
-version: 0.032
+version: 0.033
