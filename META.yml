@@ -1,46 +1,45 @@
 ---
 abstract: 'Catmandu module for working with SRU data'
 author:
-  - 'Wouter Willaert <wouterw@inuits.eu>'
+  - 'Wouter Willaert, C<< <wouterw@inuits.eu> >>'
 build_requires:
-  Software::License: 0
-  Test::Exception: 0
-  Test::More: 0
+  Module::Build: '0.3601'
+  Test::More: '1.001003'
+  Test::Simple: '1.001003'
+  XML::XPath: '1.13'
 configure_requires:
-  Module::Build: 0.42
-dynamic_config: 1
-generated_by: 'Module::Build version 0.4203, CPAN::Meta::Converter version 2.133380'
+  Module::Build: '0.3601'
+dynamic_config: 0
+generated_by: 'Dist::Milla version v1.0.5, Dist::Zilla version 5.016, CPAN::Meta::Converter version 2.141170'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
-  version: 1.4
+  version: '1.4'
 name: Catmandu-SRU
-provides:
-  Catmandu::Importer::SRU:
-    file: lib/Catmandu/Importer/SRU.pm
-  Catmandu::Importer::SRU::Parser:
-    file: lib/Catmandu/Importer/SRU/Parser.pm
-  Catmandu::Importer::SRU::Parser::marcxml:
-    file: lib/Catmandu/Importer/SRU/Parser/marcxml.pm
-  Catmandu::Importer::SRU::Parser::raw:
-    file: lib/Catmandu/Importer/SRU/Parser/raw.pm
-  Catmandu::Importer::SRU::Parser::simple:
-    file: lib/Catmandu/Importer/SRU/Parser/simple.pm
-  Catmandu::Importer::SRU::Parser::struct:
-    file: lib/Catmandu/Importer/SRU/Parser/struct.pm
-  Catmandu::SRU:
-    file: lib/Catmandu/SRU.pm
-    version: 0.033
+no_index:
+  directory:
+    - t
+    - xt
+    - inc
+    - share
+    - eg
+    - examples
 requires:
-  Catmandu: 0.0302
-  Furl: 0.41
-  Moo: 1.000003
-  URI::Escape: 1.60
-  XML::LibXML::Simple: 0.91
-  XML::Struct: 0.16
+  Catmandu: '0.9103'
+  Furl: '0.41'
+  Moo: '1.0'
+  URI::Escape: '1.60'
+  XML::LibXML::Simple: '0.91'
+  XML::Struct: '0.16'
+  YAML::XS: '0.34'
   perl: v5.10.1
 resources:
   bugtracker: https://github.com/LibreCat/Catmandu-SRU/issues
-  license: http://dev.perl.org/licenses/
-  repository: https://github.com/LibreCat/Catmandu-SRU
-version: 0.033
+  homepage: https://github.com/LibreCat/Catmandu-SRU
+  repository: https://github.com/LibreCat/Catmandu-SRU.git
+version: '0.034'
+x_contributors:
+  - 'Jakob Voss <jakob@nichtich.de>'
+  - 'Jakob Voss <voss@gbv.de>'
+  - 'Nicolas Steenlant <nicolas.steenlant@ugent.be>'
+  - 'wouterw <wouter.willaert@gmail.com>'

@@ -1,5 +1,9 @@
 Revision history for Catmandu-SRU
 
+0.034  2014-05-29 16:45:37 CEST
+  - building code with Dist::Milla
+  - updating pod
+
 0.033 2014-03-03
   - credits
 
