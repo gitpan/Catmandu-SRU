@@ -4,7 +4,7 @@
       "Wouter Willaert, C<< <wouterw@inuits.eu> >>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Milla version v1.0.5, Dist::Zilla version 5.016, CPAN::Meta::Converter version 2.141170",
+   "generated_by" : "Dist::Milla version v1.0.5, Dist::Zilla version 5.019, CPAN::Meta::Converter version 2.141520",
    "license" : [
       "perl_5"
    ],
@@ -41,9 +41,9 @@
       },
       "runtime" : {
          "requires" : {
-            "Catmandu" : "0.9103",
+            "Catmandu" : "0.9204",
             "Furl" : "0.41",
-            "Moo" : "1.0",
+            "Moo" : "1.005000",
             "URI::Escape" : "1.60",
             "XML::LibXML::Simple" : "0.91",
             "XML::Struct" : "0.16",
@@ -71,10 +71,11 @@
          "web" : "https://github.com/LibreCat/Catmandu-SRU"
       }
    },
-   "version" : "0.034",
+   "version" : "0.035",
    "x_contributors" : [
       "Jakob Voss <jakob@nichtich.de>",
       "Jakob Voss <voss@gbv.de>",
+      "Johann Rolschewski <rolschewski@gmail.com>",
       "Nicolas Steenlant <nicolas.steenlant@ugent.be>",
       "wouterw <wouter.willaert@gmail.com>"
    ]

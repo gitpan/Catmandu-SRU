@@ -6,7 +6,7 @@ Catmandu::SRU - Catmandu module for working with SRU data
 
 =cut
 
-our $VERSION = '0.034';
+our $VERSION = '0.035';
 
 =head1 SYNOPSIS
 
@@ -80,7 +80,11 @@ Wouter Willaert, C<< <wouterw@inuits.eu> >>
 
 Patrick Hochstenbach, C<< <patrick.hochstenbach at ugent.be> >>
 
-Jakob Voss C<< jakob.voss@gbv.de >>
+Nicolas Steenlant, C<< <nicolas.steenlant at ugent.be> >>
+
+Jakob Voss C<< jakob.voss at gbv.de >>
+
+Johann Rolschewski C<< rolschewski at gmail.com >>
 
 =head1 LICENSE AND COPYRIGHT
 
