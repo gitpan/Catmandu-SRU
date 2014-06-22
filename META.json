@@ -71,7 +71,7 @@
          "web" : "https://github.com/LibreCat/Catmandu-SRU"
       }
    },
-   "version" : "0.036",
+   "version" : "0.037",
    "x_contributors" : [
       "Jakob Voss <jakob@nichtich.de>",
       "Jakob Voss <voss@gbv.de>",
