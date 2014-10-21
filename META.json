@@ -4,7 +4,7 @@
       "Wouter Willaert, C<< <wouterw@inuits.eu> >>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Milla version v1.0.5, Dist::Zilla version 5.016, CPAN::Meta::Converter version 2.141170",
+   "generated_by" : "Dist::Milla version v1.0.8, Dist::Zilla version 5.020, CPAN::Meta::Converter version 2.142060",
    "license" : [
       "perl_5"
    ],
@@ -26,16 +26,17 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "Module::Build" : "0.3601"
+            "Module::Build" : "0.28"
          }
       },
       "configure" : {
          "requires" : {
-            "Module::Build" : "0.3601"
+            "Module::Build" : "0.28"
          }
       },
       "develop" : {
          "requires" : {
+            "Dist::Milla" : "v1.0.8",
             "Test::Pod" : "1.41"
          }
       },
@@ -53,6 +54,7 @@
       },
       "test" : {
          "requires" : {
+            "Test::Exception" : "0",
             "Test::More" : "1.001003",
             "Test::Simple" : "1.001003",
             "XML::XPath" : "1.13"
@@ -71,12 +73,13 @@
          "web" : "https://github.com/LibreCat/Catmandu-SRU"
       }
    },
-   "version" : "0.037",
+   "version" : "0.038",
    "x_contributors" : [
       "Jakob Voss <jakob@nichtich.de>",
       "Jakob Voss <voss@gbv.de>",
       "Johann Rolschewski <rolschewski@gmail.com>",
       "Nicolas Steenlant <nicolas.steenlant@ugent.be>",
+      "Patrick Hochstenbach <patrick.hochstenbach@ugent.be>",
       "wouterw <wouter.willaert@gmail.com>"
    ]
 }
